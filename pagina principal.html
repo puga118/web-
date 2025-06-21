@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Aula Escuela Comunidad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .nav-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenidos a nuestra pagina del PAEC</h1>
+        <p>Accede a la información que obtuvimos durante la realización de este proyecto. Haz clic en cualquier tarjeta para navegar.</p>
+        
+        <div class="nav-grid">
+            <a href="a.html" class="nav-card">
+                <h3>Pensamiento Matematico 2</h3>
+                <p>Las matematicas en ayuda al ambiente</p>
+            </a>
+            
+            <a href="e.html" class="nav-card">
+                <h3>Lengua y comunicación 2</h3>
+                <p>Que se penso durante la realización del proyecto</p>
+            </a>
+            
+            <a href="f.html" class="nav-card">
+                <h3>Electronica</h3>
+                <p>Los circuitos no solo contaminan el ambiente</p>
+            </a>
+            
+            <a href="b.html" class="nav-card">
+                <h3>Conservación de la Energia y sus Interacciones</h3>
+                <p>La energia calorifica no solo contamina</p>
+            </a>
+            
+            <a href="d.html" class="nav-card">
+                <h3>Ingles 2</h3>
+                <p>Concientización en otros idiomas</p>
+            </a>
+            
+            <a href="c.html" class="nav-card">
+                <h3>Juego del reciclaje</h3>
+                <p>Un poco de entretenimiento</p>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 Mi Sitio Web. Luca Beltrán Díaz, Emiliano Puga García, Diego Hernández Castañon, Carlos Chavez Garcia, Lucas Vazquez.</p>
+        </div>
+    </div>
+</body>
+</html>

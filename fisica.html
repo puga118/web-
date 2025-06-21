@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Del desecho a la Creatividad...</title>
+    <style>
+        /* Fondo con imagen y capa oscura */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            background: none;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwrSDEKgzXjHsD6JduJQwR4L47eTP6SrnMJw&s');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4);
+            z-index: -1;
+        }
+
+        header {
+            background-color: rgba(0, 86, 179, 0.7);
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin: 0;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .contenedor {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .info {
+            flex: 1 1 250px;
+            margin: 20px;
+            max-width: 300px;
+        }
+
+        .imagen-central {
+            flex: 1 1 300px;
+            text-align: center;
+            margin: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .descarga {
+            text-align: center;
+            margin: 30px auto;
+        }
+
+        .descarga a {
+            background-color: white;
+            color: #007BFF;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .descarga a:hover {
+            background-color: #e0e0e0;
+        }
+
+        .boton-retorno {
+            display: block;
+            width: fit-content;
+            margin: 40px auto;
+            background-color: white;
+            color: #007BFF;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .boton-retorno:hover {
+            background-color: #e0e0e0;
+        }
+
+        .tubos {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .tubo {
+            display: inline-block;
+            width: 60px;
+            height: 150px;
+            background-color: white;
+            border-radius: 10px 10px 0 0;
+            margin: 10px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        .tubo.reaccion {
+            background-color: #28a745;
+        }
+
+        .burbuja {
+            width: 10px;
+            height: 10px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 10px;
+            left: 25px;
+            animation: burbujas 1s ease-out forwards;
+        }
+
+        @keyframes burbujas {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120px);
+                opacity: 0;
+            }
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <h1>Del desecho a la Creatividad...</h1>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="contenedor">
+        <div class="info">
+            <h2>Investigación</h2>
+            <p>Puedes checar toda la información en el documento siguiente.</p>
+        </div>
+
+        <div class="imagen-central">
+            <!-- Imagen eliminada -->
+        </div>
+
+        <div class="info">
+            <h2>Experimento</h2>
+            <p>Puedes tener el proceso completo en el documento siguiente.</p>
+        </div>
+    </div>
+
+    <!-- Animación interactiva: Tubos de ensayo -->
+    <div class="tubos">
+        <h2>Haz clic en un tubo de ensayo:</h2>
+        <div class="tubo" onclick="reaccionar(this)"></div>
+        <div class="tubo" onclick="reaccionar(this)"></div>
+        <div class="tubo" onclick="reaccionar(this)"></div>
+    </div>
+
+    <!-- Sección de descarga -->
+    <div class="descarga">
+        <p>📄 Puedes acceder al archivo aquí:</p>
+        <a href="Reporte de Fisica.pdf" download>Descargar archivo</a>
+    </div>
+
+    <!-- Botón de retorno -->
+    <a href="PAEC.html" class="boton-retorno">← Volver</a>
+
+    <!-- Script para animación -->
+    <script>
+        function reaccionar(tubo) {
+            tubo.classList.add("reaccion");
+
+            for (let i = 0; i < 5; i++) {
+                const burbuja = document.createElement("div");
+                burbuja.classList.add("burbuja");
+                burbuja.style.left = `${20 + Math.random() * 20}px`;
+                tubo.appendChild(burbuja);
+
+                setTimeout(() => {
+                    burbuja.remove();
+                }, 1000);
+            }
+
+            setTimeout(() => {
+                tubo.classList.remove("reaccion");
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

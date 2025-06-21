@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Juego: Recoge la Basura</title>
+  <style>
+    /* ... tus estilos existentes ... */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #c2f0c2;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 10px 0;
+      color: #2e7d32;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 100vw;
+      height: 65vh;
+      background: #a2d149;
+      border: 4px solid #2e7d32;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .basura {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      cursor: grab;
+      transition: transform 0.2s;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .basura:active {
+      cursor: grabbing;
+      transform: scale(1.1);
+      z-index: 1000;
+    }
+
+    #boteBasura {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 120px;
+      height: 150px;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMj1PlZ-hFJbTIAqXIlTJ59viJxTso4NoLSw&s') no-repeat center;
+      background-size: cover;
+      border: 3px solid #2e7d32;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #2e7d32aa;
+    }
+
+    #infoPanel {
+      width: 100vw;
+      text-align: center;
+      margin: 10px 0;
+      font-size: 1.3rem;
+      color: #2e7d32;
+    }
+
+    #finalMessage, #startScreen {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2e7d32ee;
+      color: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      font-size: 2rem;
+      text-align: center;
+      display: none;
+      z-index: 2000;
+      max-width: 90vw;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: #2e7d32;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+    }
+
+    #highScoresPanel {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 250px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #a2d149dd;
+      border: 2px solid #2e7d32;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.9rem;
+      color: #2e7d32;
+      box-shadow: 2px 2px 10px #2e7d32aa;
+      z-index: 1500;
+    }
+
+    #highScoresPanel h3 {
+      margin: 0 0 10px 0;
+      text-align: center;
+      font-weight: bold;
+      color: #1b4d1b;
+    }
+
+    #highScoresList {
+      list-style: none;
+      padding-left: 5px;
+      margin: 0;
+    }
+
+    #highScoresList li {
+      margin-bottom: 6px;
+      border-bottom: 1px solid #2e7d3222;
+      padding-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Juego: Recoge la Basura</h1>
+
+  <div id="infoPanel">
+    Tiempo: <span id="time">60</span>s | Basura recogida: <span id="score">0</span>
+  </div>
+
+  <div id="gameArea"></div>
+  <div id="boteBasura" title="Arrastra la basura aquí"></div>
+
+  <div id="startScreen">
+    <div>🧹 ¡Recoge la basura roja! No tires la basura verde o pierdes.</div>
+    <button onclick="iniciarJuego()">Iniciar Juego</button>
+  </div>
+
+  <!-- FINAL MESSAGE CON BOTÓN DE RETORNO -->
+  <div id="finalMessage">
+    <div id="mensajeFinalTexto"></div>
+    <button onclick="reiniciarJuego()">Jugar de Nuevo</button>
+    <button onclick="window.location.href='PAEC.html'">Volver al Inicio</button>
+  </div>
+
+  <div id="highScoresPanel">
+    <h3>Mejores puntuaciones</h3>
+    <ol id="highScoresList"></ol>
+  </div>
+
+  <script>
+    // Tu JavaScript permanece igual, no es necesario modificar nada
+    // porque el botón de retorno usa window.location.href
+    const gameArea = document.getElementById('gameArea');
+    const scoreSpan = document.getElementById('score');
+    const timeSpan = document.getElementById('time');
+    const finalMessage = document.getElementById('finalMessage');
+    const mensajeFinalTexto = document.getElementById('mensajeFinalTexto');
+    const startScreen = document.getElementById('startScreen');
+    const bote = document.getElementById('boteBasura');
+    const highScoresList = document.getElementById('highScoresList');
+
+    let score = 0;
+    let time = 60;
+    let basuraGenerada = 0;
+    const limiteBasura = 10000;
+    let gameInterval;
+    let spawnInterval;
+
+    const tiposBasura = [
+      { name: 'basura', src: 'https://cdn-icons-png.flaticon.com/512/565/565655.png', tipo: 'desechable' },
+      { name: 'lata', src: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png', tipo: 'desechable' },
+      { name: 'carton', src: 'https://cdn-icons-png.flaticon.com/512/126/126509.png', tipo: 'desechable' },
+      { name: 'plastico', src: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', tipo: 'noDesechable' },
+      { name: 'botella', src: 'https://cdn-icons-png.flaticon.com/512/2907/2907760.png', tipo: 'noDesechable' }
+    ];
+
+    function crearBasura() {
+      if (time <= 0 || basuraGenerada >= limiteBasura) return;
+      basuraGenerada++;
+      const basura = document.createElement('img');
+      const tipo = tiposBasura[Math.floor(Math.random() * tiposBasura.length)];
+      basura.src = tipo.src;
+      basura.className = 'basura';
+      basura.dataset.tipo = tipo.tipo;
+      if(tipo.tipo === 'desechable'){
+        basura.style.border = '3px solid #cc0000';
+        basura.style.boxShadow = '0 0 8px 2px #cc0000cc';
+      } else {
+        basura.style.border = '3px solid #007a00';
+        basura.style.boxShadow = '0 0 8px 2px #007a00cc';
+      }
+      const boteRect = bote.getBoundingClientRect();
+      const areaRect = gameArea.getBoundingClientRect();
+      let x, y;
+      let overlap;
+      const maxTries = 30;
+      let tries = 0;
+      do {
+        x = Math.random() * (gameArea.clientWidth - 50);
+        y = Math.random() * (gameArea.clientHeight - 50);
+        const basuraRect = {
+          left: x + areaRect.left,
+          right: x + areaRect.left + 50,
+          top: y + areaRect.top,
+          bottom: y + areaRect.top + 50
+        };
+        overlap = !(boteRect.right < basuraRect.left ||
+                    boteRect.left > basuraRect.right ||
+                    boteRect.bottom < basuraRect.top ||
+                    boteRect.top > basuraRect.bottom);
+        tries++;
+      } while (overlap && tries < maxTries);
+      basura.style.left = x + 'px';
+      basura.style.top = y + 'px';
+      gameArea.appendChild(basura);
+      hacerArrastrable(basura);
+    }
+
+    function hacerArrastrable(elemento) {
+      let offsetX, offsetY;
+      let dragging = false;
+      elemento.addEventListener('mousedown', e => {
+        dragging = true;
+        offsetX = e.clientX - elemento.getBoundingClientRect().left;
+        offsetY = e.clientY - elemento.getBoundingClientRect().top;
+        elemento.style.transition = 'none';
+        elemento.style.zIndex = 1000;
+      });
+      window.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        let x = e.clientX - offsetX - gameArea.getBoundingClientRect().left;
+        let y = e.clientY - offsetY - gameArea.getBoundingClientRect().top;
+        x = Math.min(Math.max(0, x), gameArea.clientWidth - elemento.clientWidth);
+        y = Math.min(Math.max(0, y), gameArea.clientHeight - elemento.clientHeight);
+        elemento.style.left = x + 'px';
+        elemento.style.top = y + 'px';
+      });
+      window.addEventListener('mouseup', e => {
+        if (!dragging) return;
+        dragging = false;
+        elemento.style.zIndex = '';
+        const basuraRect = elemento.getBoundingClientRect();
+        const boteRect = bote.getBoundingClientRect();
+        const sobreBote = !(boteRect.right < basuraRect.left ||
+                           boteRect.left > basuraRect.right ||
+                           boteRect.bottom < basuraRect.top ||
+                           boteRect.top > basuraRect.bottom);
+        if (sobreBote) {
+          if (elemento.dataset.tipo === 'noDesechable') {
+            finalizarJuego(false, "❌ Mala separación de residuos. Has tirado basura no desechable.");
+            return;
+          }
+          if(elemento.dataset.tipo === 'desechable'){
+            score++;
+            scoreSpan.textContent = score;
+          }
+          elemento.remove();
+        } else {
+          elemento.style.transition = 'transform 0.3s';
+          elemento.style.transform = 'none';
+        }
+      });
+    }
+
+    function iniciarJuego() {
+      startScreen.style.display = 'none';
+      finalMessage.style.display = 'none';
+      score = 0;
+      time = 60;
+      basuraGenerada = 0;
+      scoreSpan.textContent = score;
+      timeSpan.textContent = time;
+      gameArea.innerHTML = '';
+      cargarPuntuaciones();
+      spawnInterval = setInterval(crearBasura, 500);
+      gameInterval = setInterval(() => {
+        time--;
+        timeSpan.textContent = time;
+        if (time <= 0) {
+          finalizarJuego(true);
+        }
+      }, 1000);
+    }
+
+    function finalizarJuego(terminadoPorTiempo, mensaje) {
+      clearInterval(spawnInterval);
+      clearInterval(gameInterval);
+      if (terminadoPorTiempo) {
+        mensajeFinalTexto.textContent = `⌛ Tiempo terminado! Tu puntaje es ${score}.`;
+        guardarPuntuacion(score);
+      } else {
+        mensajeFinalTexto.textContent = mensaje;
+      }
+      finalMessage.style.display = 'block';
+      cargarPuntuaciones();
+    }
+
+    function reiniciarJuego() {
+      finalMessage.style.display = 'none';
+      startScreen.style.display = 'block';
+    }
+
+    function guardarPuntuacion(puntaje) {
+      let puntuaciones = JSON.parse(localStorage.getItem('basuraScores')) || [];
+      puntuaciones.push(puntaje);
+      puntuaciones.sort((a, b) => b - a);
+      if (puntuaciones.length > 5) puntuaciones = puntuaciones.slice(0, 5);
+      localStorage.setItem('basuraScores', JSON.stringify(puntuaciones));
+    }
+
+    function cargarPuntuaciones() {
+      let puntuaciones = JSON.parse(localStorage.getItem('basuraScores')) || [];
+      highScoresList.innerHTML = '';
+      if(puntuaciones.length === 0){
+        highScoresList.innerHTML = '<li>No hay puntuaciones aún.</li>';
+        return;
+      }
+      puntuaciones.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.textContent = `${i+1}. ${p} puntos`;
+        highScoresList.appendChild(li);
+      });
+    }
+
+    window.onload = () => {
+      startScreen.style.display = 'block';
+      cargarPuntuaciones();
+    };
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Electrónica para qué nos sirve</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Fondo con imagen de electrónica */
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('https://www.electropolis.es/media/magefan_blog/2017/09/Psychiatric-Disorder-1.jpg');
+      background-size: cover;
+      background-position: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Contenedor con fondo semitransparente para legibilidad */
+    .container {
+      background-color: rgba(0, 0, 0, 0.65);
+      flex: 1;
+      padding: 30px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Título con estilo cúbico */
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #00ffff;
+      text-shadow:
+        3px 3px 0 #0ff,
+        6px 6px 0 #0cc,
+        9px 9px 0 #099;
+      margin: 0 0 30px 0;
+      max-width: 600px;
+    }
+
+    /* Zona principal con contenido y la imagen a la derecha */
+    .main-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* Zona de info (texto) */
+    .info {
+      flex: 1 1 300px;
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      box-shadow: 0 0 10px #00ffffa0;
+    }
+
+    /* Imagen a la derecha */
+    .imagen-derecha {
+      flex: 0 0 350px;
+      max-width: 350px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #00ffffaa;
+      transition: transform 0.3s ease;
+    }
+    .imagen-derecha:hover {
+      transform: scale(1.05);
+    }
+
+    /* Botón de retorno abajo */
+    .boton-retorno {
+      margin-top: 40px;
+      align-self: center;
+      padding: 14px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #00ffff;
+      background-color: transparent;
+      border: 3px solid #00ffff;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .boton-retorno:hover {
+      background-color: #00ffff;
+      color: #000;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      .imagen-derecha {
+        max-width: 90%;
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Electrónica para qué nos sirve</h1>
+    <div class="main-content">
+      <div class="info">
+        <p>
+          En la especialidad de electronica se nos pidio hacer un bote de basura, el cual cuando se pone peso en ella marca que este lleno y si no hay nada que este vacio.
+        </p>
+        <p>
+          Esto nos hace reflexionar de que en nuestras especialidades se puede hacer algo para bajar nuestro indice de basura como tal.
+        </p>
+      </div>
+      <img class="imagen-derecha" src="https://lens.usercontent.google.com/image?vsrid=CLqAgZD_sdqNRhACGAEiJGZkMGIzY2ExLTNjNjMtNDNlNi1hODkwLWMyYWI3MjcwNWUzMDIGIgJubigE&gsessionid=5KPJObG1DEp9nJSqUxw_oFW9ncsa9dZMMc4k2dnA8__pmJezFe0aZQ" alt="Imagen Electrónica" />
+    </div>
+    <a href="PAEC.html" class="boton-retorno">⬅ Volver al Inicio</a>
+  </div>
+</body>
+</html>
